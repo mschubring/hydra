@@ -1,0 +1,12 @@
+# Directories #
+.vscode/
+.settings/
+target/
+logs/
+
+# Files #
+.classpath
+.factorypath
+.project
+.springBeans
+application-local.*

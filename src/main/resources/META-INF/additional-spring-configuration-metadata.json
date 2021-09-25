@@ -1,0 +1,15 @@
+{
+    "groups": [{
+        "name": "hydra",
+        "type": "inc.troll.hydra.config.HydraConfig",
+        "sourceType": "",
+        "description": "Properties related to Hydra"
+    }],
+    "properties": [{
+        "name": "hydra.bot-token",
+        "type": "java.lang.String",
+        "sourceType": "",
+        "description": "token to authenticate the bot with discord"
+    }],
+    "hints": []
+}
