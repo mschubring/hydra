@@ -8,5 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties("hydra")
 public class HydraConfig {
+
     private String botToken;
+    private long channelId;
 }

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,10 @@ public class HydraBot extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        commandProcessor.process(event);
+        MessageChannel chanel = event.getChannel();
+        long hydraChannelId = config.getChannelId();
+        if(chanel.getIdLong() == hydraChannelId) {
+            commandProcessor.process(event);
+        }
     }
 }

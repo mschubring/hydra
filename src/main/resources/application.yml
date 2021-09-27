@@ -16,3 +16,4 @@ logging:
 
 hydra:
   bot-token: ${BOT_TOKEN}
+  channel-id: ${BOT_CHANNEL_ID}
