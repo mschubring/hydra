@@ -1,6 +1,9 @@
 # Directories #
 .vscode/
 .settings/
+.gradle/
+build/
+bin/
 target/
 logs/
 
