@@ -1,50 +1,67 @@
 package inc.troll.hydra.modules.discord;
 
 import inc.troll.hydra.config.HydraConfig;
-import lombok.RequiredArgsConstructor;
-import net.dv8tion.jda.api.JDA;
+import inc.troll.hydra.modules.discord.commands.HelpCommand;
+import inc.troll.hydra.modules.discord.commands.PingCommand;
+import inc.troll.hydra.modules.discord.commands.PlayCommand;
+import lombok.Getter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.springframework.stereotype.Service;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.security.auth.login.LoginException;
 
-@Service
-@RequiredArgsConstructor
+@Component
 public class HydraBot extends ListenerAdapter {
 
     private final HydraConfig config;
-    private final CommandProcessor commandProcessor;
-    private JDA jda;
 
-    @PostConstruct
-    public JDA initDiscordClient()
+    public HydraBot(HydraConfig config)
         throws LoginException, InterruptedException
     {
-        if (jda != null) {
-            return jda;
-        }
-
-        return JDABuilder.createDefault(config.getBotToken())
+        this.config = config;
+        JDABuilder.createDefault(config.getBotToken())
             .setStatus(OnlineStatus.ONLINE)
+            .enableCache(CacheFlag.VOICE_STATE)
             .setActivity(Activity.of(ActivityType.LISTENING, "... euch"))
             .addEventListeners(this)
             .build()
             .awaitReady();
     }
 
+    @Getter
+    private CommandManager commandManager;
+
+    @PostConstruct
+    private void initCommands() {
+        commandManager = new CommandManager(config);
+        commandManager.add(new PlayCommand());
+        commandManager.add(new PingCommand());
+        commandManager.add(new HelpCommand());
+        // new commands go here
+    }
+
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
-        MessageChannel chanel = event.getChannel();
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+
+        long channelId = event.getChannel().getIdLong();
         long hydraChannelId = config.getChannelId();
-        if(chanel.getIdLong() == hydraChannelId) {
-            commandProcessor.process(event);
+        if( event.getAuthor().isBot() ||
+            event.isWebhookMessage() ||
+            channelId != hydraChannelId
+        ) {
+            return;
+        }
+
+        String message = event.getMessage().getContentRaw();
+        if(message.startsWith(config.getPrefix())) {
+            commandManager.handle(event);
         }
     }
 }

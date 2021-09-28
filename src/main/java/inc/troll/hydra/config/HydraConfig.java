@@ -11,4 +11,5 @@ public class HydraConfig {
 
     private String botToken;
     private long channelId;
+    private String prefix;
 }
