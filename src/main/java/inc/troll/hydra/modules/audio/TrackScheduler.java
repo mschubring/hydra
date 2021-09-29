@@ -5,11 +5,13 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Getter
 @RequiredArgsConstructor
 public class TrackScheduler extends AudioEventAdapter {
 
@@ -24,6 +26,30 @@ public class TrackScheduler extends AudioEventAdapter {
         if(!player.startTrack(track, true)) {
             tracks.offer(track);
         }
+    }
+
+    /**
+     * stop player and empty queue
+     */
+    public void stopPlaying() {
+        player.stopTrack();
+        tracks.clear();
+    }
+
+    /**
+     * {@code true} if player currently playing
+     * @return
+     */
+    public boolean isPlaying() {
+        return player.getPlayingTrack() != null;
+    }
+
+    /**
+     * {@code true} if player is currently NOT playing
+     * @return
+     */
+    public boolean isNotPlaying() {
+        return !isPlaying();
     }
 
     @Override

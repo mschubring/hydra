@@ -4,6 +4,8 @@ import inc.troll.hydra.config.HydraConfig;
 import inc.troll.hydra.modules.discord.commands.HelpCommand;
 import inc.troll.hydra.modules.discord.commands.PingCommand;
 import inc.troll.hydra.modules.discord.commands.PlayCommand;
+import inc.troll.hydra.modules.discord.commands.SkipCommand;
+import inc.troll.hydra.modules.discord.commands.StopCommand;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -44,6 +46,8 @@ public class HydraBot extends ListenerAdapter {
         commandManager.add(new PlayCommand());
         commandManager.add(new PingCommand());
         commandManager.add(new HelpCommand());
+        commandManager.add(new StopCommand());
+        commandManager.add(new SkipCommand());
         // new commands go here
     }
 
