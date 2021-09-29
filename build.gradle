@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'inc.troll'
-version = '1.0.0'
+version = '1.0.0-RELEASE'
 sourceCompatibility = '11'
 
 configurations {
