@@ -7,12 +7,14 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class HydraManager {
 
     private static HydraManager INSTANCE;
@@ -66,10 +68,15 @@ public class HydraManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist playList) {
-                trackLoaded(playList.getSelectedTrack());
-                channel.sendMessage("Sorry play lists are not supported ...\n")
-                    .append("... but I will play the first track for you ;-)")
-                    .queue();
+                if(playList.isSearchResult()) {
+                    playList.getTracks().stream()
+                        .findFirst()
+                        .ifPresent(this::trackLoaded);
+                } else {
+                    channel.sendMessage("Sorry play lists are not supported ...\n")
+                        .append("... but I will play the first track for you ;-)")
+                        .queue();
+                }
             }
 
             @Override

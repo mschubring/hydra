@@ -4,6 +4,9 @@ import inc.troll.hydra.config.HydraConfig;
 import inc.troll.hydra.modules.discord.commands.CommandContext;
 import inc.troll.hydra.modules.discord.commands.ICommand;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.message.guild.GenericGuildMessageEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class CommandManager {
 
@@ -39,6 +43,8 @@ public class CommandManager {
      * @param event
      */
     public void handle(GuildMessageReceivedEvent event) {
+        logGuildInfo(event);
+
         String message = event.getMessage().getContentRaw();
         String[] split = StringUtils.trimToEmpty(message).split("\\s+");
         String command = split[0].replace(config.getPrefix(), "")
@@ -50,5 +56,17 @@ public class CommandManager {
                 CommandContext ctx = new CommandContext(event, args);
                 cmd.handle(ctx);
             });
+    }
+
+    /**
+     * log basic guild information to identify potention abuse
+     * @param event
+     */
+    private void logGuildInfo(GenericGuildMessageEvent event) {
+        Guild guild = event.getGuild();
+        long id = guild.getIdLong();
+        String name = guild.getName();
+
+        log.info("guild: {} ({})", name, id);
     }
 }
