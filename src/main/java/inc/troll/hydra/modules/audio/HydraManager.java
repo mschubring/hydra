@@ -47,6 +47,34 @@ public class HydraManager {
         });
     }
 
+    public void loadAndPlayFilePath(Guild guild, String filePath) {
+        HydraMusicManager hydra = getMusicManager(guild);
+        playerManager.loadItemOrdered(hydra, filePath, new AudioLoadResultHandler() {
+
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                hydra.getScheduler().append(track);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void noMatches() {
+                // TODO Auto-generated method stub
+                log.error("no match for {}", filePath);
+            }
+
+            @Override
+            public void loadFailed(FriendlyException exception) {
+                // TODO Auto-generated method stub
+                log.error("failed to load {}", filePath);
+            }
+        });
+    }
+
     public void loadAndPlayUrl(TextChannel channel, String trackUrl) {
         HydraMusicManager hydra = getMusicManager(channel.getGuild());
         playerManager.loadItemOrdered(hydra, trackUrl, new AudioLoadResultHandler() {
