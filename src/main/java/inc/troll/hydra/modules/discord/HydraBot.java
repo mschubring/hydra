@@ -19,13 +19,10 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.security.auth.login.LoginException;
-
-import java.io.IOException;
 
 @Slf4j
 @Component
@@ -117,15 +114,16 @@ public class HydraBot extends ListenerAdapter {
      * @param guild
      */
     private void playHydraTrack(Guild guild) {
-        try {
-            String filePath = new ClassPathResource(HYDRA_TRACK)
-                .getURI()
-                .getPath();
-
-            HydraManager.getInstance().loadAndPlayFilePath(guild, filePath);
-        } catch (IOException cause) {
-            String msg = "can't load hydra track {}: {}";
-            log.error(msg, HYDRA_TRACK, cause);
-        }
+        HydraManager.getInstance().loadAndPlayFilePath(guild, HYDRA_TRACK);
+        // try {
+        //     // FIXME - in JAR log says : "i.t.hydra.modules.audio.HydraManager: no match for null"
+        //     String filePath = new ClassPathResource(HYDRA_TRACK)
+        //         .getURI()
+        //         .getPath();
+        //     HydraManager.getInstance().loadAndPlayFilePath(guild, filePath);
+        // } catch (IOException cause) {
+        //     String msg = "can't load hydra track {}: {}";
+        //     log.error(msg, HYDRA_TRACK, cause);
+        // }
     }
 }
