@@ -7,22 +7,19 @@ import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class CommandManager {
 
     private final HydraConfig config;
-    private final Map<String, ICommand> commands = new HashMap<>();
+    private final Map<String, ICommand> commands = new TreeMap<>();
 
     /**
      * add command to manager.
      * command name need to be unique.
-     * @param command
+     * @param command which should be registered.
      */
     public void add(ICommand command) {
         String name = config.getPrefix()+command.getName();
@@ -30,13 +27,13 @@ public class CommandManager {
             String msg = "command " + name + " already present";
             throw new IllegalArgumentException(msg);
         }
-        commands.putIfAbsent(name, command);
+        commands.putIfAbsent(name, command); // absence check was done above?
     }
 
     /**
      * handles {@link GuildMessageReceivedEvent} and checks for known command.
      * only {@link #add(ICommand) added} commands are taken into account
-     * @param event
+     * @param event the event containing a message in the bot's channel.
      */
     public void handle(GuildMessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
@@ -49,5 +46,9 @@ public class CommandManager {
                 CommandContext ctx = new CommandContext(event, args);
                 cmd.handle(ctx);
             });
+    }
+
+    public Stream<ICommand> getRegisteredCommands(){
+        return this.commands.values().stream();
     }
 }
