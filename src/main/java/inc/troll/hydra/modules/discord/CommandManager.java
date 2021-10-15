@@ -25,7 +25,7 @@ public class CommandManager {
      * @param command
      */
     public void add(ICommand command) {
-        String name = command.getName();
+        String name = config.getPrefix()+command.getName();
         if(commands.containsKey(name)) {
             String msg = "command " + name + " already present";
             throw new IllegalArgumentException(msg);
@@ -41,8 +41,7 @@ public class CommandManager {
     public void handle(GuildMessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
         String[] split = StringUtils.trimToEmpty(message).split("\\s+");
-        String command = split[0].replace(config.getPrefix(), "")
-            .toLowerCase();
+        String command = split[0].toLowerCase();
 
         Optional.ofNullable(commands.get(command))
             .ifPresent(cmd -> {
