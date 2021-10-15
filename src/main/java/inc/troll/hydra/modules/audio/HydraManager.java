@@ -11,7 +11,11 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +37,7 @@ public class HydraManager {
     }
 
     public static HydraManager getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new HydraManager();
         }
         return INSTANCE;
@@ -45,6 +49,29 @@ public class HydraManager {
             guild.getAudioManager().setSendingHandler(hydra.getSendHandler());
             return hydra;
         });
+    }
+
+    public void loadAndPlayFromClassPath(Guild guild, String classPathLocation) {
+        String fileExtension = StringUtils.substringAfterLast(classPathLocation, ".");
+        try {
+            File tempFile = File.createTempFile("tmp_hydra", fileExtension);
+            tempFile.deleteOnExit();
+            try (InputStream classpathInput = this.getClass().getClassLoader().getResourceAsStream(classPathLocation); OutputStream tempFileOutput = new FileOutputStream(tempFile)) {
+                if (classpathInput != null) {
+                    // If a resource is in a jar, the url provided is almost exclusively understood by the jvm.
+                    // The lavaplayer does not support an AudioTrack solely backed by an inputstream.
+                    // Therefore, we copy the resource into a temporary file.
+                    IOUtils.copy(classpathInput, tempFileOutput);
+                    loadAndPlayFilePath(guild, tempFile.getPath());
+                } else {
+                    log.error("Did not find {} at the classpath", classPathLocation);
+                }
+            } catch (IOException e) {
+                log.error("Failed to write the temp file {} for resource {}", tempFile, classPathLocation, e);
+            }
+        } catch (IOException e) {
+            log.error("Failed to create a temp file for resource {}", classPathLocation, e);
+        }
     }
 
     public void loadAndPlayFilePath(Guild guild, String filePath) {
@@ -82,26 +109,26 @@ public class HydraManager {
             @Override
             public void loadFailed(FriendlyException cause) {
                 channel.sendMessage("Sorry can not load ")
-                    .append(trackUrl)
-                    .append(" because ")
-                    .append(cause.getMessage())
-                    .queue();
+                        .append(trackUrl)
+                        .append(" because ")
+                        .append(cause.getMessage())
+                        .queue();
             }
 
             @Override
             public void noMatches() {
                 channel.sendMessage("Sorry can not load ")
-                    .append(trackUrl)
-                    .append(" ... url broken?")
-                    .queue();
+                        .append(trackUrl)
+                        .append(" ... url broken?")
+                        .queue();
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playList) {
-                if(!playList.isSearchResult()) {
+                if (!playList.isSearchResult()) {
                     channel.sendMessage("No play lists, sorry :sweat_smile:\n")
-                        .append("But I'll play the first one for you :wink:")
-                        .queue();
+                            .append("But I'll play the first one for you :wink:")
+                            .queue();
                 }
                 playList.getTracks().stream()
                         .findFirst()
@@ -113,10 +140,10 @@ public class HydraManager {
                 hydra.getScheduler().append(track);
 
                 channel.sendMessage("Append to queue: ")
-                    .append(track.getInfo().title)
-                    .append(" by ")
-                    .append(track.getInfo().author)
-                    .queue();
+                        .append(track.getInfo().title)
+                        .append(" by ")
+                        .append(track.getInfo().author)
+                        .queue();
             }
         });
     }

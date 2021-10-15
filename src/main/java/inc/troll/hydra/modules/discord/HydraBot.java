@@ -116,16 +116,6 @@ public class HydraBot extends ListenerAdapter {
      * @param guild the server hydra should play the song at.
      */
     private void playHydraTrack(Guild guild) {
-        HydraManager.getInstance().loadAndPlayFilePath(guild, HYDRA_TRACK);
-        // try {
-        //     // FIXME - in JAR log says : "i.t.hydra.modules.audio.HydraManager: no match for null"
-        //     String filePath = new ClassPathResource(HYDRA_TRACK)
-        //         .getURI()
-        //         .getPath();
-        //     HydraManager.getInstance().loadAndPlayFilePath(guild, filePath);
-        // } catch (IOException cause) {
-        //     String msg = "can't load hydra track {}: {}";
-        //     log.error(msg, HYDRA_TRACK, cause);
-        // }
+        HydraManager.getInstance().loadAndPlayFromClassPath(guild, HYDRA_TRACK);
     }
 }
