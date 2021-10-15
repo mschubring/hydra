@@ -7,7 +7,7 @@ public class StopCommand implements ICommand {
 
     @Override
     public void handle(CommandContext ctx) {
-        if(isBotWithMemberinChannel(ctx)) {
+        if (ctx.areBotAndUserInSameVoiceChannel()) {
             HydraManager.getInstance()
                 .getMusicManager(ctx.getGuild())
                 .getScheduler()
@@ -25,30 +25,11 @@ public class StopCommand implements ICommand {
     }
 
     @Override
-    public String getHelp() {
-        return new StringBuilder()
-            .append("stop playing songs\n")
-            .append("usage: `.stop`")
-            .toString();
+    public List<String> getHelp() {
+        return List.of(
+                "stop playing songs",
+                "usage: `.stop`"
+        );
     }
 
-    /**
-     * checks if requesting member and bot are in same voice channel
-     * @param ctx
-     * @return
-     */
-    private boolean isBotWithMemberinChannel(CommandContext ctx) {
-        GuildVoiceState memberVoiceState = ctx.getMember().getVoiceState();
-        GuildVoiceState selfVoiceState = ctx.getSelfMember().getVoiceState();
-
-        if(!memberVoiceState.inVoiceChannel() ||
-            !selfVoiceState.inVoiceChannel()
-        ) {
-            return false;
-        }
-
-        long memberChannelId = memberVoiceState.getChannel().getIdLong();
-        long selfChannelId = selfVoiceState.getChannel().getIdLong();
-        return memberChannelId == selfChannelId;
-    }
 }
