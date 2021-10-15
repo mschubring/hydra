@@ -48,7 +48,7 @@ public class CommandManager {
             });
     }
 
-    public Stream<ICommand> getRegisteredCommands(){
-        return this.commands.values().stream();
+    public Stream<Map.Entry<String,ICommand>> getRegisteredCommands(){
+        return this.commands.entrySet().stream();
     }
 }
