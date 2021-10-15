@@ -46,7 +46,7 @@ public class CommandContext implements ICommandContext {
      * @param memberSelector selects a member from the commandContext.
      * @return a function to extract the Optional&lg;VoiceChannel&gt; of the selected member. It's empty, if the member is not in a voice channel.
      */
-    private Function<CommandContext, Optional<VoiceChannel>> getVoiceChannelFor(@Nonnull Function<CommandContext, Member> memberSelector) {
+    public Function<CommandContext, Optional<VoiceChannel>> getVoiceChannelFor(@Nonnull Function<CommandContext, Member> memberSelector) {
         return ctx -> Optional.of(ctx)
                 .map(memberSelector) // select bot or user.
                 .map(Member::getVoiceState)
