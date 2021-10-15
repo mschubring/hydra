@@ -1,7 +1,8 @@
 package inc.troll.hydra.modules.discord.commands;
 
 import inc.troll.hydra.modules.audio.HydraManager;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
+
+import java.util.List;
 
 public class StopCommand implements ICommand {
 
@@ -9,13 +10,13 @@ public class StopCommand implements ICommand {
     public void handle(CommandContext ctx) {
         if (ctx.areBotAndUserInSameVoiceChannel()) {
             HydraManager.getInstance()
-                .getMusicManager(ctx.getGuild())
-                .getScheduler()
-                .stopPlaying();
+                    .getMusicManager(ctx.getGuild())
+                    .getScheduler()
+                    .stopPlaying();
 
             ctx.getGuild()
-                .getAudioManager()
-                .closeAudioConnection();
+                    .getAudioManager()
+                    .closeAudioConnection();
         }
     }
 

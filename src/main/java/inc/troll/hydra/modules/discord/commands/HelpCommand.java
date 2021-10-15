@@ -1,5 +1,7 @@
 package inc.troll.hydra.modules.discord.commands;
 
+import java.util.List;
+
 public class HelpCommand implements ICommand {
 
     @Override
@@ -18,8 +20,8 @@ public class HelpCommand implements ICommand {
     }
 
     @Override
-    public String getHelp() {
-        return null;
+    public List<String> getHelp() {
+        return List.of("displays this text");
     }
 
 

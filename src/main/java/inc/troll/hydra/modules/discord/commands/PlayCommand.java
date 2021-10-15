@@ -40,14 +40,14 @@ public class PlayCommand implements ICommand {
     }
 
     @Override
-    public String getHelp() {
-        return new StringBuilder()
-            .append("plays a song\n")
-            .append("usage:")
-            .append("`.play` - plays top of queue")
-            .append("`.play <YouTube link>` - plays Youtube link")
-            .append("`.play <YouTube search>` - plays first YouTube search result")
-            .toString();
+    public List<String> getHelp() {
+        return List.of(
+                "plays a song",
+                "usage:",
+                "`.play` - plays top of queue",
+                "`.play <YouTube link>` - plays Youtube link",
+                "`.play <YouTube search>` - plays first YouTube search result"
+        );
     }
 
     /**

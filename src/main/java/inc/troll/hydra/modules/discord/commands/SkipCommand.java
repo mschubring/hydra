@@ -4,16 +4,18 @@ import inc.troll.hydra.modules.audio.HydraManager;
 import inc.troll.hydra.modules.audio.TrackScheduler;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 
+import java.util.List;
+
 public class SkipCommand implements ICommand {
 
     @Override
     public void handle(CommandContext ctx) {
         if (ctx.areBotAndUserInSameVoiceChannel()) {
             TrackScheduler scheduler = HydraManager.getInstance()
-                .getMusicManager(ctx.getGuild())
-                .getScheduler();
+                    .getMusicManager(ctx.getGuild())
+                    .getScheduler();
 
-            if(scheduler.isPlaying()) {
+            if (scheduler.isPlaying()) {
                 scheduler.nextTrack();
             }
         }
@@ -25,10 +27,10 @@ public class SkipCommand implements ICommand {
     }
 
     @Override
-    public String getHelp() {
-        return new StringBuilder()
-            .append("skip current song\n")
-            .append("usage: `.skip`")
-            .toString();
+    public List<String> getHelp() {
+        return List.of(
+                "skip current song",
+                "usage: `.skip`"
+        );
     }
 }

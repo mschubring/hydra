@@ -2,6 +2,8 @@ package inc.troll.hydra.modules.discord.commands;
 
 import net.dv8tion.jda.api.JDA;
 
+import java.util.List;
+
 public class PingCommand implements ICommand {
 
     @Override
@@ -11,8 +13,8 @@ public class PingCommand implements ICommand {
             String msg = "REST ping: `%sms`\nWS ping: `%sms`";
             long wsPing = jda.getGatewayPing();
             ctx.getChannel()
-                .sendMessageFormat(msg, ping, wsPing)
-                .queue();
+                    .sendMessageFormat(msg, ping, wsPing)
+                    .queue();
         });
     }
 
@@ -22,11 +24,11 @@ public class PingCommand implements ICommand {
     }
 
     @Override
-    public String getHelp() {
-        return new StringBuilder()
-            .append("display current latency in ms for REST and WebSocket\n")
-            .append("usage: `.ping`")
-            .toString();
+    public List<String> getHelp() {
+        return List.of(
+                "display current latency in ms for REST and WebSocket",
+                "usage: `.ping`"
+        );
     }
 
 }
