@@ -5,6 +5,7 @@ import inc.troll.hydra.modules.audio.HydraManager;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ListCommand implements ICommand {
@@ -36,7 +37,7 @@ public class ListCommand implements ICommand {
     }
 
     @Override
-    public String getHelp() {
-        return "print current play list";
+    public List<String> getHelp() {
+        return List.of("print current play list");
     }
 }
