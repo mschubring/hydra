@@ -2,11 +2,7 @@ package inc.troll.hydra.modules.discord;
 
 import inc.troll.hydra.config.HydraConfig;
 import inc.troll.hydra.modules.audio.HydraManager;
-import inc.troll.hydra.modules.discord.commands.HelpCommand;
-import inc.troll.hydra.modules.discord.commands.PingCommand;
-import inc.troll.hydra.modules.discord.commands.PlayCommand;
-import inc.troll.hydra.modules.discord.commands.SkipCommand;
-import inc.troll.hydra.modules.discord.commands.StopCommand;
+import inc.troll.hydra.modules.discord.commands.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDABuilder;
@@ -56,6 +52,7 @@ public class HydraBot extends ListenerAdapter {
         commandManager.add(new HelpCommand(commandManager::getRegisteredCommands)); // yep a little ugly :(
         commandManager.add(new StopCommand());
         commandManager.add(new SkipCommand());
+        commandManager.add(new ListCommand());
         // new commands go here
     }
 
