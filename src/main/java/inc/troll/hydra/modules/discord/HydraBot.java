@@ -1,6 +1,5 @@
 package inc.troll.hydra.modules.discord;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioReference;
 import inc.troll.hydra.config.HydraConfig;
 import inc.troll.hydra.modules.audio.HydraManager;
 import inc.troll.hydra.modules.discord.commands.HelpCommand;
@@ -116,6 +115,7 @@ public class HydraBot extends ListenerAdapter {
      * @param guild the server hydra should play the song at.
      */
     private void playHydraTrack(Guild guild) {
-        HydraManager.getInstance().loadAndPlayFromClassPath(guild, HYDRA_TRACK);
+        HydraManager.getInstance()
+            .loadAndPlayFromClassPath(guild, HYDRA_TRACK);
     }
 }

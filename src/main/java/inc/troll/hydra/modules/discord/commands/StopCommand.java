@@ -10,13 +10,13 @@ public class StopCommand implements ICommand {
     public void handle(CommandContext ctx) {
         if (ctx.areBotAndUserInSameVoiceChannel()) {
             HydraManager.getInstance()
-                    .getMusicManager(ctx.getGuild())
-                    .getScheduler()
-                    .stopPlaying();
+                .getMusicManager(ctx.getGuild())
+                .getScheduler()
+                .stopPlaying();
 
             ctx.getGuild()
-                    .getAudioManager()
-                    .closeAudioConnection();
+                .getAudioManager()
+                .closeAudioConnection();
         }
     }
 
@@ -28,8 +28,8 @@ public class StopCommand implements ICommand {
     @Override
     public List<String> getHelp() {
         return List.of(
-                "stop playing songs",
-                "usage: `.stop`"
+            "stop playing songs",
+            "usage: `.stop`"
         );
     }
 

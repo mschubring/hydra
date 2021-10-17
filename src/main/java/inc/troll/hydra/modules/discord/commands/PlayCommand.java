@@ -42,11 +42,11 @@ public class PlayCommand implements ICommand {
     @Override
     public List<String> getHelp() {
         return List.of(
-                "plays a song",
-                "usage:",
-                "`.play` - plays top of queue",
-                "`.play <YouTube link>` - plays Youtube link",
-                "`.play <YouTube search>` - plays first YouTube search result"
+            "plays a song",
+            "usage:",
+            "`.play` - plays top of queue",
+            "`.play <YouTube link>` - plays Youtube link",
+            "`.play <YouTube search>` - plays first YouTube search result"
         );
     }
 
@@ -56,10 +56,12 @@ public class PlayCommand implements ICommand {
      * @param ctx the command's execution context
      */
     private void joinVoiceChannel(CommandContext ctx) {
-        Consumer<VoiceChannel> joinChannel = ctx.getGuild().getAudioManager()::openAudioConnection;
+        Consumer<VoiceChannel> joinChannel = ctx.getGuild()
+            .getAudioManager()::openAudioConnection;
+
         Optional.of(ctx)
-                .flatMap(ctx.getVoiceChannelFor(CommandContext::getMember))
-                .ifPresent(joinChannel);
+            .flatMap(ctx.getVoiceChannelFor(CommandContext::getMember))
+            .ifPresent(joinChannel);
     }
 
 
@@ -76,10 +78,10 @@ public class PlayCommand implements ICommand {
         }
         String domain = URI.create(args).getHost().toLowerCase();
         return whitelist.stream()
-                .filter(url -> StringUtils.equals(domain, url))
-                .findFirst()
-                .map(url -> args)
-                .orElse(domain);
+            .filter(url -> StringUtils.equals(domain, url))
+            .findFirst()
+            .map(url -> args)
+            .orElse(domain);
     }
 
     /**
@@ -90,7 +92,7 @@ public class PlayCommand implements ICommand {
      */
     private void playRequestedUrl(CommandContext ctx, String url) {
         HydraManager.getInstance()
-                .loadAndPlayUrl(ctx.getChannel(), url);
+            .loadAndPlayUrl(ctx.getChannel(), url);
     }
 
     // FIXME - does not work, because queue will be emptied by scheduler event. fix scheduler events
@@ -102,8 +104,8 @@ public class PlayCommand implements ICommand {
      */
     private void playTopOfQueue(CommandContext ctx) {
         TrackScheduler scheduler = HydraManager.getInstance()
-                .getMusicManager(ctx.getGuild())
-                .getScheduler();
+            .getMusicManager(ctx.getGuild())
+            .getScheduler();
 
         if (scheduler.isNotPlaying()) {
             scheduler.nextTrack();

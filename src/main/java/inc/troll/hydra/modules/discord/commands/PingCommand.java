@@ -13,8 +13,8 @@ public class PingCommand implements ICommand {
             String msg = "REST ping: `%sms`\nWS ping: `%sms`";
             long wsPing = jda.getGatewayPing();
             ctx.getChannel()
-                    .sendMessageFormat(msg, ping, wsPing)
-                    .queue();
+                .sendMessageFormat(msg, ping, wsPing)
+                .queue();
         });
     }
 
@@ -26,8 +26,8 @@ public class PingCommand implements ICommand {
     @Override
     public List<String> getHelp() {
         return List.of(
-                "display current latency in ms for REST and WebSocket",
-                "usage: `.ping`"
+            "display current latency in ms for REST and WebSocket",
+            "usage: `.ping`"
         );
     }
 
