@@ -34,7 +34,7 @@ public class HelpCommand implements ICommand {
     private Stream<String> getHelpFor(Map.Entry<String, ICommand> command) {
         return Stream.concat(
             Stream.of(COMMAND_PREFIX + command.getKey() + COMMAND_SUFFIX),
-            command.getValue().getHelp().stream().map(""::concat)
+            command.getValue().getHelp().stream().map("  "::concat)
         );
     }
 
